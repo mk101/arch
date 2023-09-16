@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Server</title>
+</head>
+
+<body>
+    <div th:each="string: ${strings}">
+        <p th:text="${string}"></p>
+    </div>
+</body>
+
+</html>
