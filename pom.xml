@@ -25,6 +25,7 @@
     <org.lombok.version>1.18.24</org.lombok.version>
 
     <junit.version>3.8.1</junit.version>
+    <minio.version>8.5.6</minio.version>
   </properties>
 
   <dependencies>
@@ -58,6 +59,12 @@
         <groupId>org.projectlombok</groupId>
         <artifactId>lombok</artifactId>
         <version>${org.lombok.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.minio</groupId>
+        <artifactId>minio</artifactId>
+        <version>${minio.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

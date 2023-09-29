@@ -1,11 +1,13 @@
 package kolesov.maxim.server.controller;
 
 import kolesov.maxim.server.service.AddDataService;
+import kolesov.maxim.server.service.GetDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RestController
@@ -13,13 +15,28 @@ import org.springframework.web.bind.annotation.RestController;
 public class ServerController {
 
     private final AddDataService addDataService;
+    private final GetDataService getDataService;
 
-    @PostMapping
+    @PostMapping(consumes = "text/plain")
     public void addData(@RequestBody String data) {
         log.info("-----RECV-----");
         log.info(data);
         log.info("--------------");
         addDataService.addData(data);
+    }
+
+    @PostMapping
+    public void addFile(@RequestParam("file") MultipartFile file) {
+        log.info("-----RECV FILE-----");
+        log.info(file.getOriginalFilename());
+        log.info("-------------------");
+        String name = addDataService.addImage(file);
+        addDataService.addData(name);
+    }
+
+    @GetMapping(value = "/images/{image}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public ByteArrayResource getImage(@PathVariable String image) {
+        return getDataService.getImage(image);
     }
 
 }

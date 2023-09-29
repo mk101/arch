@@ -8,8 +8,13 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -28,7 +33,11 @@ public class ClientService {
         int count = config.getTryCount();
         do {
             try {
-                client.produceMessage(config.getMessage());
+                if (isFile()) {
+                    sendFile();
+                } else {
+                    sendText();
+                }
                 log.info("Done");
                 return;
             } catch (FeignException e) {
@@ -38,6 +47,24 @@ public class ClientService {
         } while (--count > 0);
 
         log.info("Failed to send data. Try later");
+    }
+
+    private void sendText() {
+        client.produceMessage(config.getMessage());
+    }
+
+    @SneakyThrows
+    private void sendFile() {
+        Path path = Paths.get(config.getMessage());
+        String name = path.toFile().getName();
+        String contentType = "application/octet-stream";
+        byte[] content = Files.readAllBytes(path);
+        MultipartFile body = new MockMultipartFile(name, name, contentType, content);
+        client.produceFile(body);
+    }
+
+    private boolean isFile() {
+        return Files.exists(Paths.get(config.getMessage()));
     }
 
 }

@@ -6,8 +6,11 @@
 </head>
 
 <body>
-    <div th:each="string: ${strings}">
-        <p th:text="${string}"></p>
+    <div th:each="model: ${models}">
+        <div th:switch="${model.isImage()}">
+            <p th:case="false" th:text="${model.getData()}"></p>
+            <img th:case="true" th:src="${'/images/' + model.getData()}" th:alt="${model.getData()}">
+        </div>
     </div>
 </body>
 

@@ -1,5 +1,6 @@
 package kolesov.maxim.server.controller;
 
+import kolesov.maxim.server.model.DataModel;
 import kolesov.maxim.server.service.GetDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -16,8 +17,8 @@ public class WebController {
 
     @GetMapping
     public String getAll(Model model) {
-        List<String> data = getDataService.getAll();
-        model.addAttribute("strings", data);
+        List<DataModel> data = getDataService.getAll();
+        model.addAttribute("models", data);
 
         return "data-str";
     }
