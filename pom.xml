@@ -10,6 +10,7 @@
   <modules>
     <module>server</module>
     <module>client</module>
+    <module>monitor</module>
   </modules>
 
   <name>arch</name>
