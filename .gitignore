@@ -41,3 +41,4 @@ build/
 state.txt
 serverOutput.txt
 serverError.txt
+heartbeat.txt
