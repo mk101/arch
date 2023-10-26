@@ -13,6 +13,23 @@ services:
       MINIO_ROOT_USER: root
       MINIO_ROOT_PASSWORD: rootrootroot
     command: server --console-address ":9001" /data
+  users_database:
+    image: postgres
+    container_name: users_database
+    ports:
+      - "5432:5432"
+    volumes:
+      - users_database:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=arch
+  adminer:
+    image: adminer
+    container_name: adminer
+    ports:
+      - "8081:8080"
 
 volumes:
   minio_storage: {}
+  users_database: {}

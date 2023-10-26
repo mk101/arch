@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,6 +18,7 @@ public class ServerController {
     private final AddDataService addDataService;
     private final GetDataService getDataService;
 
+    @PreAuthorize("hasRole('TEXT')")
     @PostMapping(consumes = "text/plain")
     public void addData(@RequestBody String data) {
         log.info("-----RECV-----");
@@ -26,6 +28,7 @@ public class ServerController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('IMAGE')")
     public void addFile(@RequestParam("file") MultipartFile file) {
         log.info("-----RECV FILE-----");
         log.info(file.getOriginalFilename());

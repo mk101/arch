@@ -16,11 +16,11 @@ public class HeartbeatService {
 
     private static final String MESSAGE = "PING";
 
-    @Value("${heartbeat-file}")
+    @Value("${heartbeat.file}")
     private Path filePath;
 
     @SneakyThrows
-    @Scheduled(cron = "${heartbeat-period}")
+    @Scheduled(cron = "${heartbeat.period}")
     public void ping() {
         log.debug("Ping");
         Files.writeString(filePath, MESSAGE,

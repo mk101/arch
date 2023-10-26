@@ -6,6 +6,7 @@ import kolesov.maxim.client.config.ClientConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.mock.web.MockMultipartFile;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -25,9 +27,19 @@ public class ClientService {
     private final Client client;
     private final ClientConfig config;
 
+    @Value("${login:#{null}}")
+    private String login;
+    @Value("${password:#{null}}")
+    private String password;
+
     @SneakyThrows
     @EventListener(ApplicationStartedEvent.class)
     public void sendMessage() {
+        if (login == null || password == null) {
+            log.error("Login and password expected");
+            return;
+        }
+
         log.info("Trying to send message '{}'", config.getMessage());
 
         int count = config.getTryCount();
@@ -40,6 +52,12 @@ public class ClientService {
                 }
                 log.info("Done");
                 return;
+            } catch (FeignException.Unauthorized e) {
+                log.error("UNAUTHORIZED");
+                return;
+            } catch (FeignException.Forbidden e) {
+                log.error("FORBIDDEN");
+                return;
             } catch (FeignException e) {
                 log.error("Failed: {}", e.getMessage());
                 TimeUnit.SECONDS.sleep(config.getTryDelay());
@@ -50,7 +68,7 @@ public class ClientService {
     }
 
     private void sendText() {
-        client.produceMessage(config.getMessage());
+        client.produceMessage(config.getMessage(), getAuthHeader());
     }
 
     @SneakyThrows
@@ -60,11 +78,17 @@ public class ClientService {
         String contentType = "application/octet-stream";
         byte[] content = Files.readAllBytes(path);
         MultipartFile body = new MockMultipartFile(name, name, contentType, content);
-        client.produceFile(body);
+        client.produceFile(body, getAuthHeader());
     }
 
     private boolean isFile() {
         return Files.exists(Paths.get(config.getMessage()));
+    }
+
+    private String getAuthHeader() {
+        String base64 = Base64.getEncoder().encodeToString((login + ":" + password).getBytes());
+
+        return "Basic " + base64;
     }
 
 }
