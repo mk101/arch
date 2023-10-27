@@ -14,7 +14,7 @@ import java.util.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "service_user")
+@Table(name = "user")
 public class User implements UserDetails {
 
     @Id

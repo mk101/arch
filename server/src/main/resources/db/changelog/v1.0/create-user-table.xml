@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
 
     <changeSet id="create-user-table" author="Maxim Kolesov">
-        <createTable tableName="service_user">
+        <createTable tableName="user">
             <column name="id" type="uuid">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
