@@ -1,5 +1,6 @@
 package kolesov.maxim.server.controller;
 
+import kolesov.maxim.server.model.DataModel;
 import kolesov.maxim.server.service.AddDataService;
 import kolesov.maxim.server.service.GetDataService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,9 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -40,6 +44,13 @@ public class ServerController {
     @GetMapping(value = "/images/{image}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ByteArrayResource getImage(@PathVariable String image) {
         return getDataService.getImage(image);
+    }
+
+    @GetMapping(value = "/all")
+    public List<String> getAll() {
+        return getDataService.getAll().stream()
+                .map(DataModel::getData)
+                .collect(Collectors.toList());
     }
 
 }

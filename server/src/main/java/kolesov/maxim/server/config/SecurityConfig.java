@@ -25,6 +25,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/").permitAll()
                         .requestMatchers(HttpMethod.GET, "/images/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/actuator/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/all").permitAll()
                         .anyRequest().authenticated())
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)

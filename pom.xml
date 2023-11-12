@@ -11,6 +11,7 @@
     <module>server</module>
     <module>client</module>
     <module>monitor</module>
+    <module>viewer</module>
   </modules>
 
   <name>arch</name>

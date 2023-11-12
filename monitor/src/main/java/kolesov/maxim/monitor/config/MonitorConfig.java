@@ -17,7 +17,7 @@ public class MonitorConfig {
         File outputFile = new File(OUTPUT_NAME);
         File errorFile = new File(ERROR_NAME);
 
-        ProcessBuilder builder = new ProcessBuilder("java", "-jar", jarPath);
+        ProcessBuilder builder = new ProcessBuilder("java", "-jar", "-Dserver.port=80", jarPath);
         builder.redirectOutput(outputFile);
         builder.redirectError(errorFile);
 

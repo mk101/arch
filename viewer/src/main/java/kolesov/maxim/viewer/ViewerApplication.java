@@ -1,17 +1,17 @@
-package kolesov.maxim.server;
+package kolesov.maxim.viewer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
-@EnableScheduling
+@EnableFeignClients
 @SpringBootApplication
 @EnableConfigurationProperties
-public class ServerApplication {
+public class ViewerApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(ServerApplication.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(ViewerApplication.class, args);
+	}
 
 }

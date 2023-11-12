@@ -18,10 +18,13 @@ public class AddDataService {
 
     private final DataRepository<String> dataRepository;
     private final ImageRepository imageRepository;
+    private final NotificationService notificationService;
 
     public void addData(String data) {
         log.info("Save {}", data);
         dataRepository.save(data);
+
+        notificationService.send(data);
     }
 
     @SneakyThrows
