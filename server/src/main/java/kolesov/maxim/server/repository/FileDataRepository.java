@@ -36,11 +36,13 @@ public class FileDataRepository implements DataRepository<String> {
 
     @Override
     public List<String> findAll() {
+        loadFromFile();
         return Collections.unmodifiableList(memory);
     }
 
     @Override
     public String save(String data) {
+        loadFromFile();
         memory.add(data);
         saveToFile();
 

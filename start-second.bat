@@ -1,0 +1,1 @@
+java -jar -Dserver.url="localhost:86" -Dheartbeat.file="heartbeat-2.txt" ./monitor/target/monitor-0.0.1-SNAPSHOT.jar
