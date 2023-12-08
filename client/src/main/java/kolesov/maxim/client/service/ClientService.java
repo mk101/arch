@@ -17,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -42,12 +43,22 @@ public class ClientService {
 
         log.info("Trying to send message '{}'", config.getMessage());
 
+        List<String> roles = client.getRoles(getAuthHeader());
+
         int count = config.getTryCount();
         do {
             try {
                 if (isFile()) {
+                    if (!roles.contains("ROLE_IMAGE")) {
+                        log.error("NO RIGHTS");
+                        return;
+                    }
                     sendFile();
                 } else {
+                    if (!roles.contains("ROLE_TEXT")) {
+                        log.error("NO RIGHTS");
+                        return;
+                    }
                     sendText();
                 }
                 log.info("Done");
