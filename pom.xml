@@ -12,6 +12,7 @@
     <module>client</module>
     <module>monitor</module>
     <module>viewer</module>
+    <module>viewer-ui</module>
   </modules>
 
   <name>arch</name>
