@@ -1,6 +1,7 @@
 package kolesov.maxim.server.controller;
 
 import kolesov.maxim.server.model.DataModel;
+import kolesov.maxim.server.model.User;
 import kolesov.maxim.server.service.AddDataService;
 import kolesov.maxim.server.service.GetDataService;
 import lombok.RequiredArgsConstructor;
@@ -8,9 +9,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,6 +43,11 @@ public class ServerController {
         log.info("-------------------");
         String name = addDataService.addImage(file);
         addDataService.addData(name);
+    }
+
+    @GetMapping("roles")
+    public List<String> getRoles(@AuthenticationPrincipal User user) {
+        return user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
     }
 
     @GetMapping(value = "/images/{image}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
